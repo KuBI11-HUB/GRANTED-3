@@ -1,0 +1,122 @@
+<?php
+$requiredRole = 'admin';
+require_once __DIR__ . '/../includes/auth_check.php';
+
+$pdo = getDbConnection();
+$message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $scholarshipTypeId = (int)($_POST['scholarship_type_id'] ?? 0);
+    $ruleType = $_POST['rule_type'] ?? '';
+    $operator = $_POST['operator'] ?? '';
+    $thresholdValue = sanitize($_POST['threshold_value'] ?? '');
+    $schoolYear = sanitize($_POST['school_year'] ?? '');
+    $semester = $_POST['semester'] ?? '';
+
+    $validRuleTypes = ['GPA', 'UNIT_LOAD', 'DOCUMENT', 'DEADLINE'];
+    $validOperators = ['>=', '<=', '>', '<', '=='];
+    $validSemesters = ['1st', '2nd', 'Summer'];
+
+    if (!$scholarshipTypeId || !in_array($ruleType, $validRuleTypes, true)
+        || !in_array($operator, $validOperators, true) || $thresholdValue === ''
+        || $schoolYear === '' || !in_array($semester, $validSemesters, true)) {
+        $message = 'Please fill in every field correctly.';
+    } else {
+        $stmt = $pdo->prepare(
+            'INSERT INTO rules (scholarship_type_id, rule_type, operator, threshold_value, school_year, semester, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, 1)'
+        );
+        $stmt->execute([$scholarshipTypeId, $ruleType, $operator, $thresholdValue, $schoolYear, $semester]);
+        redirectTo('/GRANTED/admin/rules.php');
+    }
+}
+
+if (isset($_GET['deactivate'])) {
+    $stmt = $pdo->prepare('UPDATE rules SET is_active = 0 WHERE id = ?');
+    $stmt->execute([(int)$_GET['deactivate']]);
+    redirectTo('/GRANTED/admin/rules.php');
+}
+
+$types = $pdo->query('SELECT * FROM scholarship_types ORDER BY name')->fetchAll();
+$rules = $pdo->query(
+    'SELECT r.*, st.name AS type_name FROM rules r
+     JOIN scholarship_types st ON st.id = r.scholarship_type_id
+     ORDER BY r.is_active DESC, st.name, r.rule_type'
+)->fetchAll();
+
+$pageTitle = 'Rules';
+require_once __DIR__ . '/../includes/header.php';
+?>
+
+<h1>Rules</h1>
+
+<div class="card">
+    <h2>Add a rule</h2>
+    <?php if ($message): ?><p class="form-error"><?php echo sanitize($message); ?></p><?php endif; ?>
+    <?php if (empty($types)): ?>
+        <p>You need at least one <a href="/GRANTED/admin/scholarship_types.php">scholarship type</a> before adding a rule.</p>
+    <?php else: ?>
+    <form method="POST" action="">
+        <label for="scholarship_type_id">Scholarship type</label>
+        <select id="scholarship_type_id" name="scholarship_type_id" required>
+            <?php foreach ($types as $t): ?>
+                <option value="<?php echo (int)$t['id']; ?>"><?php echo sanitize($t['name']); ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <label for="rule_type">Rule type</label>
+        <select id="rule_type" name="rule_type" required>
+            <option value="GPA">GPA</option>
+            <option value="UNIT_LOAD">Unit load</option>
+            <option value="DOCUMENT">Document</option>
+            <option value="DEADLINE">Deadline</option>
+        </select>
+
+        <label for="operator">Operator</label>
+        <select id="operator" name="operator" required>
+            <option value=">=">&gt;= (at least)</option>
+            <option value="<="><= (at most)</option>
+            <option value=">">&gt; (more than)</option>
+            <option value="<"><  (less than)</option>
+            <option value="==">== (exactly)</option>
+        </select>
+
+        <label for="threshold_value">Threshold value</label>
+        <input type="text" id="threshold_value" name="threshold_value" placeholder="e.g. 2.00 for GPA, 18 for units" required>
+
+        <label for="school_year">School year</label>
+        <input type="text" id="school_year" name="school_year" placeholder="2026-2027" required>
+
+        <label for="semester">Semester</label>
+        <select id="semester" name="semester" required>
+            <option value="1st">1st</option>
+            <option value="2nd">2nd</option>
+            <option value="Summer">Summer</option>
+        </select>
+
+        <button type="submit">Add rule</button>
+    </form>
+    <?php endif; ?>
+</div>
+
+<div class="card">
+    <h2>Existing rules</h2>
+    <ul class="rule-list">
+        <?php foreach ($rules as $r): ?>
+            <li>
+                <span>
+                    <strong><?php echo sanitize($r['type_name']); ?></strong> —
+                    <?php echo sanitize($r['rule_type']); ?> <?php echo sanitize($r['operator']); ?> <?php echo sanitize($r['threshold_value']); ?>
+                    (<?php echo sanitize($r['school_year']); ?>, <?php echo sanitize($r['semester']); ?>)
+                    <?php if (!$r['is_active']): ?><em>(inactive)</em><?php endif; ?>
+                </span>
+                <?php if ($r['is_active']): ?>
+                    <a href="?deactivate=<?php echo (int)$r['id']; ?>" onclick="return confirm('Deactivate this rule?');">Deactivate</a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+        <?php if (empty($rules)): ?><li>No rules yet.</li><?php endif; ?>
+    </ul>
+</div>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
