@@ -2,7 +2,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'granted_db');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', 'Geraldo_122706');
 
 function getDbConnection(): PDO
 {

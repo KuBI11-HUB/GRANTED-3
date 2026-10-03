@@ -12,6 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $thresholdValue = sanitize($_POST['threshold_value'] ?? '');
     $schoolYear = sanitize($_POST['school_year'] ?? '');
     $semester = $_POST['semester'] ?? '';
+    $dueDate = $_POST['due_date'] ?? '';
+    $dueDate = ($dueDate !== '') ? $dueDate : null;
+    if ($dueDate !== null && (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $dueDate) || strtotime($dueDate) === false)) {
+        $dueDate = null;
+    }
 
     $validRuleTypes = ['GPA', 'UNIT_LOAD', 'DOCUMENT', 'DEADLINE'];
     $validOperators = ['>=', '<=', '>', '<', '=='];
@@ -23,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Please fill in every field correctly.';
     } else {
         $stmt = $pdo->prepare(
-            'INSERT INTO rules (scholarship_type_id, rule_type, operator, threshold_value, school_year, semester, is_active)
-             VALUES (?, ?, ?, ?, ?, ?, 1)'
+            'INSERT INTO rules (scholarship_type_id, rule_type, operator, threshold_value, school_year, semester, due_date, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, 1)'
         );
-        $stmt->execute([$scholarshipTypeId, $ruleType, $operator, $thresholdValue, $schoolYear, $semester]);
+        $stmt->execute([$scholarshipTypeId, $ruleType, $operator, $thresholdValue, $schoolYear, $semester, $dueDate]);
         redirectTo('/GRANTED/admin/rules.php');
     }
 }
@@ -85,14 +90,17 @@ require_once __DIR__ . '/../includes/header.php';
         <input type="text" id="threshold_value" name="threshold_value" placeholder="e.g. 2.00 for GPA, 18 for units" required>
 
         <label for="school_year">School year</label>
-        <input type="text" id="school_year" name="school_year" placeholder="2026-2027" required>
+        <input type="text" id="school_year" name="school_year" value="<?php echo CURRENT_SCHOOL_YEAR; ?>" placeholder="2026-2027" required>
 
         <label for="semester">Semester</label>
         <select id="semester" name="semester" required>
-            <option value="1st">1st</option>
-            <option value="2nd">2nd</option>
-            <option value="Summer">Summer</option>
+            <option value="1st" <?php echo (CURRENT_SEMESTER === '1st') ? 'selected' : ''; ?>>1st</option>
+            <option value="2nd" <?php echo (CURRENT_SEMESTER === '2nd') ? 'selected' : ''; ?>>2nd</option>
+            <option value="Summer" <?php echo (CURRENT_SEMESTER === 'Summer') ? 'selected' : ''; ?>>Summer</option>
         </select>
+
+        <label for="due_date">Document deadline (optional)</label>
+        <input type="date" id="due_date" name="due_date">
 
         <button type="submit">Add rule</button>
     </form>
