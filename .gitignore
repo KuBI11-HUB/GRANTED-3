@@ -1,0 +1,5 @@
+config/gmail_credentials.json
+config/gmail_token.json
+config/app.local.php
+vendor/
+```[cite: 1]

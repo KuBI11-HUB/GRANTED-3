@@ -43,7 +43,7 @@ if ($scholar && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Prototype note: school_year/semester are hardcoded to the
                 // current cycle for now — a real build would let admin set
                 // "current cycle" somewhere and read it here instead.
-                $stmt->execute([$scholar['id'], $documentType, $storedName, '2026-2027', '1st']);
+                $stmt->execute([$scholar['id'], $documentType, $storedName, CURRENT_SCHOOL_YEAR, CURRENT_SEMESTER]);
 
                 evaluateScholar($pdo, $scholar['id']);
 

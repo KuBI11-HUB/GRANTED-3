@@ -70,13 +70,13 @@ require_once __DIR__ . '/../includes/header.php';
         <input type="number" id="units" name="units" min="1" max="10" required>
 
         <label for="school_year">School year</label>
-        <input type="text" id="school_year" name="school_year" placeholder="2026-2027" required>
+        <input type="text" id="school_year" name="school_year" value="<?php echo CURRENT_SCHOOL_YEAR; ?>" placeholder="2026-2027" required>
 
         <label for="semester">Semester</label>
         <select id="semester" name="semester" required>
-            <option value="1st">1st</option>
-            <option value="2nd">2nd</option>
-            <option value="Summer">Summer</option>
+            <option value="1st" <?php echo (CURRENT_SEMESTER === '1st') ? 'selected' : ''; ?>>1st</option>
+            <option value="2nd" <?php echo (CURRENT_SEMESTER === '2nd') ? 'selected' : ''; ?>>2nd</option>
+            <option value="Summer" <?php echo (CURRENT_SEMESTER === 'Summer') ? 'selected' : ''; ?>>Summer</option>
         </select>
 
         <button type="submit">Save grade &amp; recalculate</button>

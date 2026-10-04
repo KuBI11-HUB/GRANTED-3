@@ -1,0 +1,267 @@
+{
+  "main": {
+    "id": "346d82cb96433a3d",
+    "type": "split",
+    "children": [
+      {
+        "id": "375a34ad2c76b242",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8eda8509906c923a",
+            "type": "leaf",
+            "state": {
+              "type": "code-editor",
+              "state": {
+                "file": "config/app.php"
+              },
+              "icon": "lucide-file",
+              "title": "app.php"
+            }
+          },
+          {
+            "id": "2c390b941dd15640",
+            "type": "leaf",
+            "state": {
+              "type": "code-editor",
+              "state": {
+                "file": "config/app.local.php"
+              },
+              "icon": "lucide-file",
+              "title": "app.local.php"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "94350ba8b2dc2794",
+    "type": "split",
+    "children": [
+      {
+        "id": "c5fe34abd61502b6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6653869501ad4186",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "bcd2bad4cdf180e0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "c63f0cfd0972d14d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "ea92e21de9f1c030",
+    "type": "split",
+    "children": [
+      {
+        "id": "b85e6c3a60c8ad65",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "37fc6922bdece204",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Welcome.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "58e1fb3ba828c1ef",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Welcome.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "0c795f9958b8c11c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "dda19984282f174e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "94dfd63fa3bc8a0c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "index.php",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "fe474eb8a6192bc8",
+            "type": "leaf",
+            "state": {
+              "type": "codex-panel-view",
+              "state": {
+                "version": 1,
+                "threadId": "01a10145-5ac7-7223-8466-2c0a6470939f",
+                "threadTitle": "Create Hello HTML File"
+              },
+              "icon": "bot-message-square",
+              "title": "Codex: Create Hello HTML File"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "code-files:Create Code File": false,
+      "codex-panel:Open panel": false
+    }
+  },
+  "active": "2c390b941dd15640",
+  "lastOpenFiles": [
+    "config/gmail_token.json",
+    "index.php",
+    "composer.json",
+    "vendor/firebase/php-jwt/README.md",
+    "vendor/guzzlehttp/promises/AGENTS.md",
+    "vendor/google/apiclient-services/src/MigrationCenterAPI/FstabEntryList.php",
+    "config/app.local.php",
+    "hello-test/index.html",
+    "vendor/psr/http-message/src/UploadedFileInterface.php",
+    "vendor/psr/http-message/src/UriInterface.php",
+    "vendor/psr/http-message/src/ServerRequestInterface.php",
+    "vendor/psr/http-message/src/ResponseInterface.php",
+    "vendor/psr/http-message/src/StreamInterface.php",
+    "vendor/google/apiclient/src/Service/README.md",
+    "vendor/composer/7a3fff2a/googleapis-google-api-php-client-services-653eec9/SECURITY.md",
+    "vendor/composer/7a3fff2a/googleapis-google-api-php-client-services-653eec9/README.md",
+    "vendor/guzzlehttp/guzzle/UPGRADING.md",
+    "vendor/guzzlehttp/guzzle/README.md",
+    "vendor/guzzlehttp/guzzle/CLAUDE.md",
+    "vendor/guzzlehttp/guzzle/CHANGELOG.md",
+    "vendor/guzzlehttp/guzzle/AGENTS.md",
+    "vendor/composer/c90efa2f/guzzle-guzzle-9393947/UPGRADING.md",
+    "vendor/composer/c90efa2f/guzzle-guzzle-9393947/README.md",
+    "vendor/composer/c90efa2f/guzzle-guzzle-9393947/CLAUDE.md",
+    "vendor/composer/c90efa2f/guzzle-guzzle-9393947/CHANGELOG.md",
+    "vendor/composer/c90efa2f/guzzle-guzzle-9393947/AGENTS.md",
+    "vendor/composer/460b0453/php-fig-http-message-402d35b/README.md",
+    "vendor/composer/460b0453/php-fig-http-message-402d35b/CHANGELOG.md",
+    "vendor/symfony/polyfill-php80/README.md",
+    "vendor/psr/log/README.md",
+    "vendor/composer/f595abab/php-fig-log-f16e1d5/README.md",
+    "README_PROTOTYPE.md",
+    "Untitled 1.md",
+    "Untitled.md",
+    "uploads/documents/1dca8d14260143c281d645033b599792.jpg",
+    "uploads/documents/c1b23e4cd1400467fc38e42c00119275.jpg",
+    "uploads/documents/93396f763143de029a08f7404a7a7da6.jpg",
+    "2026-10-03.md",
+    "Untitled 1.canvas",
+    "Untitled.canvas",
+    "Welcome.md",
+    "uploads/documents/38c812019bf258362f402a2e754aab0d.jpg",
+    "uploads/documents/9bc716ecb11688bc44a98df1078d45c3.jpg",
+    "uploads/documents/b3ec7cd4824a72a4044518932433c003.jpg",
+    "uploads/documents/78b5687f166fcee42ffe9f0c0c680248.jpg",
+    "uploads/documents/4a832aed8822d6513f79dad448d7a4bd.jpg"
+  ]
+}

@@ -1,8 +1,6 @@
 <?php
 /**
- * The rule engine — Phase 3, now complete for GPA, UNIT_LOAD, and DOCUMENT.
- * DEADLINE still returns PENDING — that one needs a "today vs due date"
- * concept we haven't scoped yet.
+ * The rule engine — Phase 4 term filtering integration.
  */
 
 function compareValue($actual, string $operator, $threshold): bool
@@ -34,20 +32,18 @@ function evaluateRule(PDO $pdo, array $rule, array $scholar): string
                 ? 'PASS' : 'FAIL';
 
         case 'DOCUMENT':
-            // For a DOCUMENT rule, threshold_value holds the *required
-            // document_type string* (e.g. "Certificate of Registration"),
-            // not a number — this matches how it's documented in the schema.
+            // Filter by current school year and semester constants
             $stmt = $pdo->prepare(
-                'SELECT status FROM documents WHERE scholar_id = ? AND document_type = ?
+                'SELECT status FROM documents WHERE scholar_id = ? AND document_type = ? AND school_year = ? AND semester = ?
                  ORDER BY uploaded_at DESC LIMIT 1'
             );
-            $stmt->execute([$scholar['id'], $rule['threshold_value']]);
+            $stmt->execute([$scholar['id'], $rule['threshold_value'], CURRENT_SCHOOL_YEAR, CURRENT_SEMESTER]);
             $doc = $stmt->fetch();
 
-            if (!$doc) return 'PENDING';           // not uploaded yet
+            if (!$doc) return 'PENDING';          // not uploaded yet
             if ($doc['status'] === 'Verified') return 'PASS';
             if ($doc['status'] === 'Rejected') return 'FAIL';
-            return 'PENDING';                       // uploaded, awaiting admin review
+            return 'PENDING';                     // uploaded, awaiting admin review
 
         case 'DEADLINE':
         default:
@@ -63,6 +59,7 @@ function evaluateScholar(PDO $pdo, int $scholarId): ?string
     if (!$scholar) {
         return null;
     }
+    $oldStatus = $scholar['current_status'];
 
     $stmt = $pdo->prepare('SELECT * FROM rules WHERE scholarship_type_id = ? AND is_active = 1');
     $stmt->execute([$scholar['scholarship_type_id']]);
@@ -97,16 +94,18 @@ function evaluateScholar(PDO $pdo, int $scholarId): ?string
 
     $stmt = $pdo->prepare('UPDATE scholars SET current_status = ? WHERE id = ?');
     $stmt->execute([$overallStatus, $scholarId]);
+    notifyStatusChange($pdo, (int)$scholar['id'], $oldStatus, $overallStatus);
 
     return $overallStatus;
 }
 
 function recalculateGpaAndUnits(PDO $pdo, int $scholarId): void
 {
+    // Sum grades scoped to the current school year and semester
     $stmt = $pdo->prepare(
-        'SELECT SUM(grade * units) AS wsum, SUM(units) AS tunits FROM grades WHERE scholar_id = ?'
+        'SELECT SUM(grade * units) AS wsum, SUM(units) AS tunits FROM grades WHERE scholar_id = ? AND school_year = ? AND semester = ?'
     );
-    $stmt->execute([$scholarId]);
+    $stmt->execute([$scholarId, CURRENT_SCHOOL_YEAR, CURRENT_SEMESTER]);
     $row = $stmt->fetch();
 
     $totalUnits = $row['tunits'] !== null ? (int)$row['tunits'] : null;
@@ -118,8 +117,7 @@ function recalculateGpaAndUnits(PDO $pdo, int $scholarId): void
 
 /**
  * Returns the list of required document_types (from active DOCUMENT rules)
- * for a scholarship type, each with the scholar's latest upload status —
- * this is both the scholar's checklist AND the upload form's dropdown.
+ * for a scholarship type, each with the scholar's latest upload status for the current term.
  */
 function getDocumentChecklist(PDO $pdo, int $scholarId, int $scholarshipTypeId): array
 {
@@ -134,9 +132,9 @@ function getDocumentChecklist(PDO $pdo, int $scholarId, int $scholarshipTypeId):
     foreach ($required as $r) {
         $stmt = $pdo->prepare(
             'SELECT status, remarks, uploaded_at FROM documents
-             WHERE scholar_id = ? AND document_type = ? ORDER BY uploaded_at DESC LIMIT 1'
+             WHERE scholar_id = ? AND document_type = ? AND school_year = ? AND semester = ? ORDER BY uploaded_at DESC LIMIT 1'
         );
-        $stmt->execute([$scholarId, $r['document_type']]);
+        $stmt->execute([$scholarId, $r['document_type'], CURRENT_SCHOOL_YEAR, CURRENT_SEMESTER]);
         $doc = $stmt->fetch();
 
         $checklist[] = [
